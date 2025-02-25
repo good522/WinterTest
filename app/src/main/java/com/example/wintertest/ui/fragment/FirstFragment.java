@@ -131,7 +131,7 @@ public class FirstFragment extends Fragment {
             double latitude = 24.2100;
             double longitude= 103.0344;
             requestWeather(latitude, longitude);
-        }if (!city.equals("南岸区") && !city.equals("上海") && !city.equals("曲靖")){
+        }if (!city.equals("南岸区") && !city.equals("上海") && !city.equals("曲靖") && !city.equals("" )){
             Toast.makeText(getActivity(), "暂不支持查询该城市", Toast.LENGTH_SHORT).show();
         }
     }
@@ -195,28 +195,31 @@ public class FirstFragment extends Fragment {
                     public String handleWeatherResponse(String responseText) {
                         Gson gson = new Gson();
                         Weather weather = gson.fromJson(responseText, Weather.class);
-                        mkeypointTextView.setText(weather.getForecast_keypoint());
-                        Alert alert = weather.getAlert();
-                        Log.d("alert", "预警" + alert);
-                        if (alert != null) {
-                            responseAlert(alert);
-                        }else {
-                            mstatusTextView.setText("暂无");
+                        Weather.Result result = weather.getResult();
+                        if (result != null){
+                        mkeypointTextView.setText(result.getForecast_keypoint());
+                            Alert alert = result.getAlert();
+                            Log.d("alert", "预警" + alert);
+                            if (alert != null) {
+                                responseAlert(alert);
+                            }else {
+                                mstatusTextView.setText("暂无");
 
-                        }
-                        Realtime realtime = weather.getRealtime();
-                        Log.d("realtime", "实况" + realtime);
-                        if (realtime != null) {
-                            responseRealtime(realtime);
-                        }else {
-                            mrealtimeTextView.setText("暂无");
-                        }
-                        Daily daily = weather.getDaily();
-                        Log.d("daily", "今日" + daily);
-                        if (daily != null) {
-                            responseDaily(daily);
-                        }else {
-                            mdailyTextView.setText("暂无");
+                            }
+                            Realtime realtime = result.getRealtime();
+                            Log.d("realtime", "实况" + realtime);
+                            if (realtime != null) {
+                                responseRealtime(realtime);
+                            }else {
+                                mrealtimeTextView.setText("暂无");
+                            }
+                            Daily daily = result.getDaily();
+                            Log.d("daily", "今日" + daily);
+                            if (daily != null) {
+                                responseDaily(daily);
+                            }else {
+                                mdailyTextView.setText("暂无");
+                            }
                         }
                         return responseText;
 
@@ -385,45 +388,65 @@ public class FirstFragment extends Fragment {
                         }
                         Daily.Life_index life_index = daily.getLife_index();
                         if (life_index != null) {
-                            life_index.comfort = life_index.getComfort();
-                            for (int i = 0; i < life_index.comfort.length; i++) {
-                                if (life_index.comfort[i] != null) {
-                                    mcomfortTextView.setText(String.valueOf(life_index.comfort[i].getDesc()));
-                                } else {
-                                    mcomfortTextView.setText("暂无");
+                            if (life_index.comfort != null) {
+                                life_index.comfort = life_index.getComfort();
+                                for (int i = 0; i < life_index.comfort.length; i++) {
+                                    if (life_index.comfort[i] != null) {
+                                        mcomfortTextView.setText(String.valueOf(life_index.comfort[i].getDesc()));
+                                    } else {
+                                        mcomfortTextView.setText("暂无");
+                                    }
                                 }
+                            } else {
+                                mcomfortTextView.setText("暂无");
                             }
-                            life_index.coldRisk = life_index.getColdRisk();
-                            for (int i = 0; i < life_index.coldRisk.length; i++) {
-                                if (life_index.coldRisk[i] != null) {
-                                    mcoldTextView.setText(String.valueOf(life_index.coldRisk[i].getDesc()));
-                                } else {
-                                    mcoldTextView.setText("暂无");
+                            if (life_index.coldRisk != null) {
+                                life_index.coldRisk = life_index.getColdRisk();
+                                for (int i = 0; i < life_index.coldRisk.length; i++) {
+                                    if (life_index.coldRisk[i] != null) {
+                                        mcoldTextView.setText(String.valueOf(life_index.coldRisk[i].getDesc()));
+                                    } else {
+                                        mcoldTextView.setText("暂无");
+                                    }
                                 }
+                            } else {
+                                mcoldTextView.setText("暂无");
                             }
-                            life_index.dressing = life_index.getDressing();
-                            for (int i = 0; i < life_index.dressing.length; i++) {
-                                if (life_index.dressing[i] != null) {
-                                    mclothesTextView.setText(String.valueOf(life_index.dressing[i].getDesc()));
-                                } else {
-                                    mclothesTextView.setText("暂无");
+                            if (life_index.dressing != null) {
+                                life_index.dressing = life_index.getDressing();
+                                for (int i = 0; i < life_index.dressing.length; i++) {
+                                    if (life_index.dressing[i] != null) {
+                                        mclothesTextView.setText(String.valueOf(life_index.dressing[i].getDesc()));
+                                    } else {
+                                        mclothesTextView.setText("暂无");
+                                    }
                                 }
+                            } else {
+                                mclothesTextView.setText("暂无");
                             }
-                            life_index.ultraviolet = life_index.getUltraviolet();
-                            for (int i = 0; i < life_index.ultraviolet.length; i++) {
-                                if (life_index.ultraviolet[i] != null) {
-                                    multTextView.setText(String.valueOf(life_index.ultraviolet[i].getDesc()));
-                                } else {
-                                    multTextView.setText("暂无");
+                            if (life_index.ultraviolet != null) {
+                                life_index.ultraviolet = life_index.getUltraviolet();
+                                for (int i = 0; i < life_index.ultraviolet.length; i++) {
+                                    if (life_index.ultraviolet[i] != null) {
+                                        multTextView.setText(String.valueOf(life_index.ultraviolet[i].getDesc()));
+                                    } else {
+                                        multTextView.setText("暂无");
+                                    }
                                 }
+                            } else {
+                                multTextView.setText("暂无");
                             }
-                            life_index.carWashing = life_index.getCarWashing();
-                            for (int i = 0; i < life_index.carWashing.length; i++) {
-                                if (life_index.carWashing[i] != null) {
-                                    mcarTextView.setText(String.valueOf(life_index.carWashing[i].getDesc()));
-                                } else {
-                                    mcarTextView.setText("暂无");
+                            if (life_index.carWashing != null) {
+                                life_index.carWashing = life_index.getCarWashing();
+                                for (int i = 0; i < life_index.carWashing.length; i++) {
+                                    if (life_index.carWashing[i] != null) {
+                                        mcarTextView.setText(String.valueOf(life_index.carWashing[i].getDesc()));
+                                    } else {
+                                        mcarTextView.setText("暂无");
+                                    }
                                 }
+                            }else {
+                                mcarTextView.setText("暂无");
                             }
                         }
                     }

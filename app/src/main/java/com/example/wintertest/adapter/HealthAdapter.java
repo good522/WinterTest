@@ -9,12 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wintertest.R;
-import com.example.wintertest.gson.Health;
+import com.example.wintertest.bean.Suggestion;
+//import com.example.wintertest.gson.Health;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HealthAdapter extends RecyclerView.Adapter<HealthAdapter.ViewHolder> {
-    private List<Health.Suggestion> suggestionList;
+//    private Health.Result.Suggestion[] suggestions;
+    private List<Suggestion> suggestionList;
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView healthTitle, healthContent;
         public ViewHolder(@NonNull View itemView) {
@@ -23,9 +26,26 @@ public class HealthAdapter extends RecyclerView.Adapter<HealthAdapter.ViewHolder
             healthContent = itemView.findViewById(R.id.rv_content);
         }
     }
-    public HealthAdapter(List<Health.Suggestion> suggestionlist) {
-           this.suggestionList = suggestionlist;
+    public HealthAdapter() {
+        suggestionList = new ArrayList<>();
     }
+//    public void setSuggestion( List<String> suggestionList){
+//        if (suggestionList != null) {
+//
+//        }else {
+//            this.suggestionList = new ArrayList<>();
+//        }
+//            notifyDataSetChanged();
+//    }
+public void setSuggestion(List<Suggestion> suggestions) {
+    if (suggestions != null) {
+        this.suggestionList.clear();
+        this.suggestionList.addAll(suggestions);
+    } else {
+        this.suggestionList.clear();
+    }
+    notifyDataSetChanged();
+}
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_health, parent, false);
@@ -34,7 +54,7 @@ public class HealthAdapter extends RecyclerView.Adapter<HealthAdapter.ViewHolder
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Health.Suggestion suggestion = suggestionList.get(position);
+        Suggestion suggestion = suggestionList.get(position);
         holder.healthTitle.setText(suggestion.getTitle());
         holder.healthContent.setText(suggestion.getContent());
     }
